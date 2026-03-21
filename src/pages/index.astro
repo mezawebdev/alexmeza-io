@@ -1,0 +1,217 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { projects } from "../data/projects";
+---
+
+<Base title="Alex Meza">
+  <div class="hero">
+    <h1 class="hero-name">Alex Meza</h1>
+    <p class="hero-intro">
+      I'm a creator who writes code. Whether the medium is a <em>guitar riff</em
+      > or a <em>distributed system</em>, I care about the same thing — making
+      something that connects and solves a real problem. I've spent the last few
+      years building software across fintech, infrastructure, and developer
+      tools.
+    </p>
+    <div class="hero-links">
+      <a href="https://github.com/alexmeza">github</a>
+      <span class="sep">/</span>
+      <a href="https://linkedin.com/in/alexmeza">linkedin</a>
+      <span class="sep">/</span>
+      <a href="https://twitter.com/alexmeza">twitter</a>
+      <span class="sep">/</span>
+      <a href="mailto:hello@alexmeza.io">email</a>
+    </div>
+  </div>
+
+  <div class="projects-section">
+    <div class="projects-header">
+      <h2>Things I've built</h2>
+      <p>
+        A few projects I've been deeply involved in — the problems, the process,
+        and the outcomes.
+      </p>
+    </div>
+
+    <div class="projects-scroll">
+      {projects.map((project) => <ProjectCard {...project} />)}
+    </div>
+
+    <div class="scroll-hint"><span>&rarr;</span> scroll</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">Alex Meza</div>
+    <div class="footer-right">2026</div>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    max-width: 680px;
+    padding: 120px 32px 0;
+    margin: 0 auto;
+  }
+
+  .hero-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 56px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  .hero-intro {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 520px;
+  }
+
+  .hero-intro em {
+    color: var(--text);
+    font-style: italic;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 19px;
+  }
+
+  .hero-intro a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(122, 173, 255, 0.25);
+    transition: border-color 0.2s;
+  }
+  .hero-intro a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .hero-links a {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .hero-links a:hover {
+    color: var(--accent);
+  }
+  .hero-links .sep {
+    color: var(--border);
+    user-select: none;
+  }
+
+  /* Projects section */
+  .projects-section {
+    margin-top: 100px;
+    padding-bottom: 100px;
+  }
+
+  .projects-header {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 32px 40px;
+  }
+  .projects-header h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .projects-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* Horizontal scroll */
+  .projects-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 0 max(32px, calc((100vw - 680px) / 2));
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+  }
+  .projects-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .projects-scroll:active {
+    cursor: grabbing;
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    max-width: 680px;
+    margin: 16px auto 0;
+    padding: 0 32px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+  .scroll-hint span {
+    display: inline-block;
+    animation: nudge 2s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(6px);
+    }
+  }
+
+  /* Footer */
+  .footer {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+  .footer-right {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  const el = document.querySelector(".projects-scroll") as HTMLElement;
+  let isDown = false,
+    startX: number,
+    scrollLeft: number;
+  el.addEventListener("mousedown", (e) => {
+    isDown = true;
+    startX = e.pageX - el.offsetLeft;
+    scrollLeft = el.scrollLeft;
+  });
+  el.addEventListener("mouseleave", () => (isDown = false));
+  el.addEventListener("mouseup", () => (isDown = false));
+  el.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.5;
+  });
+</script>
