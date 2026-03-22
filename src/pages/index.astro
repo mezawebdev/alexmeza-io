@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import ProjectCard from "../components/ProjectCard.astro";
+import RisingOrbs from "../components/RisingOrbs.astro";
 import { projects } from "../data/projects";
 ---
 
@@ -44,9 +45,12 @@ import { projects } from "../data/projects";
     <div class="scroll-hint"><span>&rarr;</span> scroll</div>
   </div>
 
-  <div class="footer">
-    <div class="footer-left">Alex Meza</div>
-    <div class="footer-right">2026</div>
+  <div class="footer-wrap">
+    <RisingOrbs />
+    <div class="footer">
+      <div class="footer-left">Alex Meza</div>
+      <div class="footer-right">2026</div>
+    </div>
   </div>
 </Base>
 
@@ -196,6 +200,10 @@ import { projects } from "../data/projects";
   }
 
   /* Footer */
+  .footer-wrap {
+    position: relative;
+  }
+
   .footer {
     max-width: 680px;
     margin: 0 auto;
