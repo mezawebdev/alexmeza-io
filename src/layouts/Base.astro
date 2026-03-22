@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 interface Props {
   title?: string;
 }
@@ -23,113 +25,17 @@ const { title = "Alex Meza" } = Astro.props;
   <body>
     <div id="noise-bg"></div>
     <div class="glow"></div>
+    <div class="orbs" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+      <div class="orb orb-5"></div>
+      <div class="orb orb-6"></div>
+      <div class="orb orb-7"></div>
+    </div>
     <div class="page">
       <slot />
     </div>
   </body>
 </html>
-
-<style is:global>
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  :root {
-    --bg: #0c0e12;
-    --bg-card: #141820;
-    --bg-card-hover: #1a1f2a;
-    --text: #dce1eb;
-    --text-muted: #6b7a90;
-    --accent: #7aadff;
-    --accent-dim: #5a8fd4;
-    --border: #1e2535;
-    --tag-bg: #1a2035;
-    --tag-text: #7aadff;
-  }
-
-  body {
-    font-family: "Space Grotesk", -apple-system, system-ui, sans-serif;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Film grain */
-  #noise-bg {
-    position: fixed;
-    display: block;
-    top: -50%;
-    left: -50%;
-    right: -50%;
-    bottom: -50%;
-    width: 400%;
-    height: 400vh;
-    background: transparent url("/noise.png") repeat 0 0;
-    animation: 4000ms infinite noise;
-    pointer-events: none;
-    opacity: 0.4;
-    z-index: 1000;
-  }
-
-  @keyframes noise {
-    0%,
-    100% {
-      background-position: 0 0;
-    }
-    10% {
-      background-position: -5% -10%;
-    }
-    20% {
-      background-position: -15% 5%;
-    }
-    30% {
-      background-position: 7% -25%;
-    }
-    40% {
-      background-position: 20% 25%;
-    }
-    50% {
-      background-position: -25% 10%;
-    }
-    60% {
-      background-position: 15% 5%;
-    }
-    70% {
-      background-position: 0 15%;
-    }
-    80% {
-      background-position: 25% 35%;
-    }
-    90% {
-      background-position: -10% 10%;
-    }
-  }
-
-  /* Ambient glow */
-  .glow {
-    position: fixed;
-    top: -100px;
-    left: -10%;
-    width: 60%;
-    height: 500px;
-    background: radial-gradient(
-      ellipse,
-      rgba(122, 173, 255, 0.06) 0%,
-      transparent 70%
-    );
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .page {
-    position: relative;
-    z-index: 1;
-  }
-</style>
