@@ -3,9 +3,24 @@ import "../styles/global.css";
 
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
+  path?: string;
 }
 
-const { title = "Alex Meza" } = Astro.props;
+const SITE_URL = "https://alexmeza.io";
+const DEFAULT_DESCRIPTION =
+  "Software crafter. Clean architecture, thoughtful UI, things that feel right.";
+
+const {
+  title = "Alex Meza | Senior Software Engineer",
+  description = DEFAULT_DESCRIPTION,
+  image = "/og.png",
+  path = Astro.url.pathname,
+} = Astro.props;
+
+const canonical = new URL(path, SITE_URL).toString();
+const ogImage = new URL(image, SITE_URL).toString();
 ---
 
 <!doctype html>
@@ -13,14 +28,34 @@ const { title = "Alex Meza" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Alex Meza — creator, software engineer, musician." />
+    <meta name="theme-color" content="#0c0e12" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Alex Meza" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <title>{title}</title>
   </head>
   <body>
     <div id="noise-bg"></div>
