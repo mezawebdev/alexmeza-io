@@ -12,23 +12,18 @@ import { projects } from "../data/projects";
       <h1 class="hero-name">Alex Meza</h1>
     </div>
     <p class="hero-intro">
-      I'm a creator who writes code. Whether the medium is a <em>guitar riff</em
-      > or a <em>distributed system</em>, I care about the same thing — making
-      something that connects and solves a real problem. I've spent the last few
-      years building software across fintech, infrastructure, and developer
-      tools.
+      Software crafter. I like clean architecture, thoughtful UI, and building
+      things that feel right. Currently exploring: agentic engineering, harness
+      design, AI-augmented workflows.
     </p>
     <div class="hero-links">
       <a href="https://github.com/alexmeza">github</a>
       <span class="sep">/</span>
       <a href="https://linkedin.com/in/alexmeza">linkedin</a>
-      <span class="sep">/</span>
-      <a href="https://twitter.com/alexmeza">twitter</a>
-      <span class="sep">/</span>
-      <a href="mailto:hello@alexmeza.io">email</a>
     </div>
   </div>
 
+  {/* Temporarily hidden
   <div class="projects-section">
     <div class="projects-header">
       <h2>Things I've built</h2>
@@ -44,7 +39,9 @@ import { projects } from "../data/projects";
 
     <div class="scroll-hint"><span>&rarr;</span> scroll</div>
   </div>
+  */}
 
+  {/* Temporarily hidden
   <div class="footer-wrap">
     <RisingOrbs />
     <div class="footer">
@@ -52,12 +49,14 @@ import { projects } from "../data/projects";
       <div class="footer-right">2026</div>
     </div>
   </div>
+  */}
 </Base>
 
 <style>
   .hero {
+    width: 100%;
     max-width: 680px;
-    padding: 120px 32px 0;
+    padding: 32px;
     margin: 0 auto;
     position: relative;
     z-index: 3;
@@ -229,20 +228,22 @@ import { projects } from "../data/projects";
 </style>
 
 <script>
-  const el = document.querySelector(".projects-scroll") as HTMLElement;
-  let isDown = false,
-    startX: number,
-    scrollLeft: number;
-  el.addEventListener("mousedown", (e) => {
-    isDown = true;
-    startX = e.pageX - el.offsetLeft;
-    scrollLeft = el.scrollLeft;
-  });
-  el.addEventListener("mouseleave", () => (isDown = false));
-  el.addEventListener("mouseup", () => (isDown = false));
-  el.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.5;
-  });
+  const el = document.querySelector(".projects-scroll") as HTMLElement | null;
+  if (el) {
+    let isDown = false,
+      startX: number,
+      scrollLeft: number;
+    el.addEventListener("mousedown", (e) => {
+      isDown = true;
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener("mouseleave", () => (isDown = false));
+    el.addEventListener("mouseup", () => (isDown = false));
+    el.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.5;
+    });
+  }
 </script>
