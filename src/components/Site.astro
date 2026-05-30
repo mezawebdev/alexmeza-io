@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import avatar from "../assets/avatar.jpg";
 // TEMP (pre-launch): the selected-works section is hidden until its content
 // is ready. To restore, uncomment this import + the commented blocks below,
 // and revert src/pages/work.astro.
@@ -13,7 +15,15 @@
 >
   <div class="hero">
     <div class="hero-identity">
-      <img src="/avatar.jpg" alt="Alex Meza" class="avatar" />
+      <Image
+        src={avatar}
+        alt="Alex Meza"
+        class="avatar"
+        width={112}
+        height={112}
+        format="webp"
+        loading="eager"
+      />
       <h1 class="hero-name">Alex Meza</h1>
     </div>
     <p class="hero-intro">

@@ -1,4 +1,10 @@
 ---
+// Self-hosted fonts (woff2, same-origin, hashed by Astro) — weight 400 only,
+// the single weight the live one-pager renders. When restoring the selected-
+// works section, add the extra weights it uses (e.g. 500) here.
+import "@fontsource/space-grotesk/400.css";
+import "@fontsource/playfair-display/400.css";
+import "@fontsource/jetbrains-mono/400.css";
 import "../styles/global.css";
 
 interface Props {
@@ -49,13 +55,6 @@ const ogImage = new URL(image, SITE_URL).toString();
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <div id="noise-bg"></div>
@@ -69,8 +68,8 @@ const ogImage = new URL(image, SITE_URL).toString();
       <div class="orb orb-6"></div>
       <div class="orb orb-7"></div>
     </div>
-    <div class="page">
+    <main class="page">
       <slot />
-    </div>
+    </main>
   </body>
 </html>
