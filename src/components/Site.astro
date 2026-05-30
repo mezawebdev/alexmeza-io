@@ -1,5 +1,8 @@
 ---
-import SelectedWork from "./SelectedWork.astro";
+// TEMP (pre-launch): the selected-works section is hidden until its content
+// is ready. To restore, uncomment this import + the commented blocks below,
+// and revert src/pages/work.astro.
+// import SelectedWork from "./SelectedWork.astro";
 ---
 
 <section
@@ -25,6 +28,7 @@ import SelectedWork from "./SelectedWork.astro";
     </div>
   </div>
 
+  {/* TEMP (pre-launch): scroll cue hidden — nothing to scroll to yet.
   <a
     href="#work"
     class="scroll-cue"
@@ -49,8 +53,10 @@ import SelectedWork from "./SelectedWork.astro";
       </svg>
     ))}
   </a>
+  */}
 </section>
 
+{/* TEMP (pre-launch): selected-works section hidden until content is ready.
 <section
   class="screen screen-work"
   id="work"
@@ -59,6 +65,7 @@ import SelectedWork from "./SelectedWork.astro";
 >
   <SelectedWork />
 </section>
+*/}
 
 <style>
   html {
@@ -227,6 +234,8 @@ import SelectedWork from "./SelectedWork.astro";
   }
 </style>
 
+{/* TEMP (pre-launch): scroll-sync / chevron / deep-link JS not needed for the
+    single hero screen. Restore alongside the work section above.
 <script>
   type Section = { el: HTMLElement; path: string };
 
@@ -281,3 +290,4 @@ import SelectedWork from "./SelectedWork.astro";
     });
   });
 </script>
+*/}

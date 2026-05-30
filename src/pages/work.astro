@@ -1,11 +1,20 @@
 ---
-import Base from "../layouts/Base.astro";
-import Site from "../components/Site.astro";
+// TEMP (pre-launch): the selected-works section is hidden, so /work just
+// redirects to the home one-pager for now. To restore the standalone route,
+// revert this file to render <Site /> (see git history) and re-enable the
+// work section in src/components/Site.astro.
 ---
 
-<Base
-  title="Selected works | Alex Meza"
-  path="/work"
->
-  <Site />
-</Base>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/" />
+    <link rel="canonical" href="https://alexmeza.io/" />
+    <meta name="robots" content="noindex" />
+    <title>Alex Meza</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/">alexmeza.io</a>…</p>
+  </body>
+</html>
