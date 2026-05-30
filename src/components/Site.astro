@@ -1,0 +1,274 @@
+---
+import SelectedWork from "./SelectedWork.astro";
+---
+
+<section
+  class="screen screen-hero"
+  id="hero"
+  data-section-path="/"
+  aria-label="Intro"
+>
+  <div class="hero">
+    <div class="hero-identity">
+      <img src="/avatar.jpg" alt="Alex Meza" class="avatar" />
+      <h1 class="hero-name">Alex Meza</h1>
+    </div>
+    <p class="hero-intro">
+      Software crafter. I like clean architecture, thoughtful UI, and building
+      things that feel right. Currently exploring: agentic engineering, harness
+      design, AI-augmented workflows.
+    </p>
+    <div class="hero-links">
+      <a href="https://github.com/mezawebdev">github</a>
+      <span class="sep">/</span>
+      <a href="https://www.linkedin.com/in/mezawebdev/">linkedin</a>
+    </div>
+  </div>
+
+  <a
+    href="#work"
+    class="scroll-cue"
+    aria-label="Scroll to selected works"
+    data-scroll-to="work"
+  >
+    {[0, 1, 2, 3, 4].map((i) => (
+      <svg
+        class="scroll-cue__chevron"
+        style={`--i: ${i}`}
+        viewBox="0 0 24 14"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 2 L12 12 L22 2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    ))}
+  </a>
+</section>
+
+<section
+  class="screen screen-work"
+  id="work"
+  data-section-path="/work"
+  aria-label="Selected works"
+>
+  <SelectedWork />
+</section>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  /* Hero screen — centered viewport */
+  .screen-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero {
+    width: 100%;
+    max-width: 580px;
+    padding: 32px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-identity {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .hero-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 56px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-intro {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 520px;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .hero-links a {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .hero-links a:hover {
+    color: var(--accent);
+  }
+  .hero-links .sep {
+    color: var(--border);
+    user-select: none;
+  }
+
+  /* Scroll cue — chevron tracer (afterimage trail rising and fading) */
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 36px;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 44px;
+    color: var(--text-muted);
+    text-decoration: none;
+    line-height: 0;
+    z-index: 3;
+    transition: color 0.2s ease;
+  }
+  .scroll-cue:hover {
+    color: var(--accent);
+  }
+  .scroll-cue__chevron {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 24px;
+    height: 14px;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: scroll-cue-trail 2.6s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.52s);
+    overflow: visible;
+  }
+
+  @keyframes scroll-cue-trail {
+    0% {
+      transform: translate(-50%, 0) scale(1);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translate(-50%, -34px) scale(0.7);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { height: 14px; }
+    .scroll-cue__chevron { animation: none; opacity: 0.6; transform: translateX(-50%); }
+    .scroll-cue__chevron:not(:first-child) { display: none; }
+  }
+
+  /* Work screen — at least one viewport tall so each "page" reads as full */
+  .screen-work {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  @media (max-width: 640px) {
+    .screen-hero {
+      padding-bottom: 56px;
+    }
+    .hero {
+      padding: 24px;
+    }
+    .hero-identity {
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .avatar {
+      width: 44px;
+      height: 44px;
+    }
+    .hero-name {
+      font-size: 40px;
+    }
+    .hero-intro {
+      font-size: 16px;
+    }
+    .hero-links {
+      margin-top: 32px;
+    }
+    .scroll-cue {
+      bottom: 24px;
+    }
+  }
+</style>
+
+<script>
+  type Section = { el: HTMLElement; path: string };
+
+  const sections: Section[] = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-section-path]")
+  ).map((el) => ({ el, path: el.dataset.sectionPath! }));
+
+  // On initial load: if the URL is /work, jump straight there before first paint
+  if (sections.length > 1) {
+    const target = sections.find((s) => s.path === location.pathname);
+    if (target && target.path !== "/") {
+      target.el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
+    }
+  }
+
+  // Sync URL to whichever section is most in view
+  if (sections.length > 1 && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            const path = (entry.target as HTMLElement).dataset.sectionPath;
+            if (path && location.pathname !== path) {
+              history.replaceState(null, "", path);
+            }
+          }
+        }
+      },
+      { threshold: [0.5] }
+    );
+    sections.forEach((s) => observer.observe(s.el));
+  }
+
+  // Chevron click → smooth scroll without leaving a #hash in the URL
+  document.querySelectorAll<HTMLAnchorElement>("[data-scroll-to]").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const targetId = link.dataset.scrollTo;
+      if (!targetId) return;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+</script>

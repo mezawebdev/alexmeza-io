@@ -1,0 +1,140 @@
+{
+  "projects": [
+    {
+      "id": "avoya-booking-engine",
+      "title": "Cruise booking engine",
+      "client": "Avoya Travel",
+      "role": "Lead Developer",
+      "year": "2023 → present",
+      "yearStart": 2023,
+      "yearEnd": null,
+      "stack": ["Vue", "Nuxt", "TypeScript", "Micro-frontend"],
+      "status": "live",
+      "featured": true,
+      "summary": "Lead developer · direct-to-consumer SPA · 2025 Magellan Award",
+      "narrative": [
+        "The assisted legacy flow couldn't carry unassisted direct-to-consumer sales. Rather than retrofit it, I built a ground-up single-page booking engine, shipping the dynamic form layer as a TypeScript micro-frontend inside the existing Nuxt ecosystem so it could evolve without destabilizing the core.",
+        "The result is a fully self-serve cruise booking experience that lifted direct revenue and won the 2025 Magellan Award."
+      ],
+      "award": "2025 Magellan Award",
+      "link": { "label": "avoyatravel.com", "url": "https://www.avoyatravel.com" },
+      "images": [
+        { "src": "/work/avoya-home.png", "alt": "Avoya Travel home page", "caption": "home" },
+        { "src": "/work/avoya-booking.png", "alt": "Avoya cruise booking engine", "caption": "booking engine" }
+      ]
+    },
+    {
+      "id": "barstool-link-in-bio",
+      "title": "Link in Bio platform",
+      "client": "Barstool Sports",
+      "role": "Senior Software Engineer, Front-End",
+      "year": "2023",
+      "yearStart": 2023,
+      "yearEnd": 2023,
+      "stack": ["React", "TypeScript", "CMS"],
+      "status": "live",
+      "featured": true,
+      "summary": "Themeable React app, integrated into the corporate CMS",
+      "narrative": [
+        "Barstool needed brands to spin up white-label landing pages without an engineer in the loop every time. I built the Link in Bio platform as a themeable React app wired directly into the corporate CMS, so non-technical teams configure and ship pages themselves.",
+        "It runs in production at barstoolsports.com/bios across the brand portfolio."
+      ],
+      "link": { "label": "barstoolsports.com/bios", "url": "https://www.barstoolsports.com/bios" },
+      "images": [
+        { "src": "/work/barstool-bios.png", "alt": "Barstool Link in Bio platform", "caption": "link in bio" }
+      ]
+    },
+    {
+      "id": "afterparty-post",
+      "title": "Afterparty Post",
+      "client": "Freelance",
+      "role": "Sole developer",
+      "year": "2024",
+      "yearStart": 2024,
+      "yearEnd": 2024,
+      "stack": [],
+      "status": "live",
+      "featured": true,
+      "summary": "Freelance · marketing site for a video post-production studio",
+      "narrative": [
+        "A freelance build for a remote video post-production studio whose client roster includes Google, Intel, and Nike. I designed and shipped the full marketing site end to end — the kind of self-contained engagement where the brief, the build, and the delivery were all mine."
+      ],
+      "link": { "label": "afterpartypost.com", "url": "https://afterpartypost.com" },
+      "images": [
+        { "src": "/work/afterparty-home.png", "alt": "Afterparty Post home page", "caption": "home" },
+        { "src": "/work/afterparty-work.png", "alt": "Afterparty Post work section", "caption": "work" }
+      ],
+      "note": "Confirm year and stack before publishing."
+    },
+    {
+      "id": "rescue-public-health",
+      "title": "Public-health campaigns",
+      "client": "Rescue Agency",
+      "role": "Senior Full-Stack Developer",
+      "year": "2018–2021",
+      "yearStart": 2018,
+      "yearEnd": 2021,
+      "stack": ["Nuxt", "Next.js", "Laravel", "WordPress", "508 / WCAG"],
+      "status": "live",
+      "featured": true,
+      "summary": "FDA / HHS public-health campaigns · 508-compliant",
+      "narrative": [
+        "Three and a half years leading full-stack delivery for federally funded public-health campaigns — FDA, HHS, and state health departments, including This Free Life and Fresh Empire.",
+        "Every build shipped under strict Section 508 and WCAG compliance with screen-reader testing as a release gate, across a multi-stack fleet (Nuxt, Next.js, Laravel, WordPress)."
+      ],
+      "link": { "label": "", "url": "" },
+      "images": [
+        { "src": "/work/rescue-campaign.png", "alt": "Rescue public-health campaign", "caption": "campaign" }
+      ],
+      "note": "Verify which campaign sites are still live; choose screenshot subjects and set the link."
+    },
+    {
+      "id": "barstool-twoyay",
+      "title": "TwoYay gig marketplace",
+      "client": "Barstool Sports",
+      "role": "Senior Software Engineer, Front-End",
+      "year": "2023",
+      "yearStart": 2023,
+      "yearEnd": 2023,
+      "stack": ["JavaScript", "TypeScript"],
+      "status": "archived",
+      "featured": false,
+      "summary": "Real-time gig marketplace for an influencer platform",
+      "narrative": [],
+      "images": [],
+      "note": "Shut down. Archive-only (Wayback). Include one clean archived shot labeled 'no longer live' or omit."
+    },
+    {
+      "id": "sportsrecruits-vue-migration",
+      "title": "Vue 2 to Vue 3 migration",
+      "client": "SportsRecruits",
+      "role": "Senior Software Engineer, Front-End",
+      "year": "2022",
+      "yearStart": 2022,
+      "yearEnd": 2023,
+      "stack": ["Vue", "Laravel", "Inertia.js"],
+      "status": "live",
+      "featured": false,
+      "summary": "Migration architecture in a Laravel/Inertia ecosystem",
+      "narrative": [],
+      "images": [],
+      "note": "Short tenure, nothing visual. Footer line or omit."
+    },
+    {
+      "id": "biteable-headless-cms",
+      "title": "Headless CMS (Gutenberg + Next.js)",
+      "client": "Biteable",
+      "role": "Software Engineer",
+      "year": "2021-2022",
+      "yearStart": 2021,
+      "yearEnd": 2022,
+      "stack": ["Next.js", "React", "WordPress"],
+      "status": "shelved",
+      "featured": false,
+      "summary": "Dual-environment component system bridging Gutenberg and Next.js",
+      "narrative": [],
+      "images": [],
+      "note": "Project shelved, no live demo. Concept/architecture writeup with a diagram, or omit."
+    }
+  ]
+}
