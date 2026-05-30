@@ -1,154 +1,63 @@
 ---
-import data from "../data/projects.json";
-
-interface ProjectLink {
-  label: string;
-  url: string;
-}
-interface ProjectImage {
-  src: string;
-  alt: string;
-  caption?: string;
-}
-interface Project {
-  id: string;
-  title: string;
-  client: string;
-  role: string;
-  year: string;
-  yearStart: number;
-  yearEnd: number | null;
-  stack: string[];
-  status: "live" | "archived" | "shelved";
-  featured: boolean;
-  summary: string;
-  narrative: string[];
-  award?: string;
-  link?: ProjectLink;
-  images: ProjectImage[];
-  note?: string;
-}
-
-const projects = data.projects as Project[];
-
-const sortKey = (p: Project): number =>
-  p.yearEnd === null ? Number.MAX_SAFE_INTEGER : p.yearStart;
-
-const featured = projects
-  .filter((p) => p.featured)
-  .sort((a, b) => sortKey(b) - sortKey(a));
-
-const holding = projects
-  .filter((p) => !p.featured)
-  .sort((a, b) => sortKey(b) - sortKey(a));
-
-const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
+// Lazy-loaded: project data is fetched at runtime from /projects.json
+// (kept in /public so it ships as a static asset, no server required).
 ---
 
-<section class="selected-work" aria-labelledby="selected-work-heading">
+<section
+  class="selected-work"
+  aria-labelledby="selected-work-heading"
+  data-projects-url="/projects.json"
+>
   <p class="kicker" id="selected-work-heading">
     <span class="kicker__rule" aria-hidden="true"></span>
     <span>selected works</span>
   </p>
 
-  <ol class="work-index" role="list">
-    {
-      featured.map((p, i) => (
-        <li class={`row${i >= 3 ? " row--extra" : ""}`}>
-          <button
-            type="button"
-            class="row-trigger"
-            id={`row-${p.id}`}
-            aria-expanded="false"
-            aria-controls={`panel-${p.id}`}
-          >
-            <span class="row-main">
-              <span class="row-title">{p.title}</span>
-              <span class="row-summary">{p.summary}</span>
-            </span>
-            <span class="row-meta">
-              <span class="meta-text">
-                {p.client.toLowerCase()} · {p.year}
-              </span>
-              <span class="toggle" aria-hidden="true">
-                +
-              </span>
-            </span>
-          </button>
-
-          <div
-            id={`panel-${p.id}`}
-            class="panel"
-            role="region"
-            aria-labelledby={`row-${p.id}`}
-          >
-            <div class="panel-inner">
-              <div class="panel-content">
-                {p.narrative.map((para) => (
-                  <p class="narrative">{para}</p>
-                ))}
-
-                <p class="trail">
-                  {[p.role, p.year, ...p.stack].join(" · ").toLowerCase()}
-                </p>
-
-                {p.images.length > 0 && (
-                  <div class="shots" data-count={p.images.length}>
-                    {p.images.map((img) => (
-                      <figure class="shot">
-                        <img
-                          src={img.src}
-                          alt={img.alt}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        {img.caption && <figcaption>{img.caption}</figcaption>}
-                      </figure>
-                    ))}
-                  </div>
-                )}
-
-                {p.link?.url && (
-                  <p class="link">
-                    <a href={p.link.url} target="_blank" rel="noopener noreferrer">
-                      {p.link.label}
-                      <span class="arrow" aria-hidden="true">↗</span>
-                    </a>
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </li>
-      ))
-    }
-    {featured.length > 3 && (
-      <li class="row-more">
-        <button type="button" class="row-more__btn" aria-expanded="false">
-          see more <span aria-hidden="true">+</span>
-        </button>
+  <ol class="work-index" role="list" data-state="empty">
+    {[0, 1, 2, 3].map((i) => (
+      <li
+        class={`row row--skeleton${i >= 3 ? " row--extra" : ""}`}
+        aria-hidden="true"
+      >
+        <div class="skeleton-main">
+          <span class="skeleton-bar skeleton-bar--title"></span>
+          <span class="skeleton-bar skeleton-bar--summary"></span>
+        </div>
+        <span class="skeleton-bar skeleton-bar--meta"></span>
       </li>
-    )}
+    ))}
   </ol>
 
-  {
-    SHOW_HOLDING && holding.length > 0 && (
-      <p class="also">
-        <span class="also-label">also worked on</span>
-        <span class="also-list">
-          {holding.map((p, i) => (
-            <>
-              {i > 0 && <span class="dot"> · </span>}
-              <span>{p.title.toLowerCase()}</span>
-            </>
-          ))}
+  <template id="work-row-template">
+    <li class="row">
+      <button type="button" class="row-trigger" aria-expanded="false">
+        <span class="row-main">
+          <span class="row-title"></span>
+          <span class="row-summary"></span>
         </span>
-      </p>
-    )
-  }
+        <span class="row-meta">
+          <span class="meta-text"></span>
+          <span class="toggle" aria-hidden="true">+</span>
+        </span>
+      </button>
+      <div class="panel" role="region">
+        <div class="panel-inner">
+          <div class="panel-content"></div>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <template id="work-more-template">
+    <li class="row-more">
+      <button type="button" class="row-more__btn" aria-expanded="false">
+        see more <span aria-hidden="true">+</span>
+      </button>
+    </li>
+  </template>
 </section>
 
-<style>
+<style is:global>
   .selected-work {
     width: 100%;
     max-width: 680px;
@@ -158,10 +67,7 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     z-index: 3;
   }
 
-  .kicker {
-    position: sticky;
-    top: 0;
-    z-index: 10;
+  .selected-work .kicker {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -169,10 +75,9 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.08em;
-    padding: 16px 0 12px;
-    margin-bottom: 0;
+    margin-bottom: 8px;
   }
-  .kicker__rule {
+  .selected-work .kicker__rule {
     width: 24px;
     height: 1px;
     background: var(--text-muted);
@@ -180,23 +85,23 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     flex-shrink: 0;
   }
 
-  .work-index {
+  .selected-work .work-index {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .row {
+  .selected-work .row {
     border-top: 1px solid var(--border);
   }
-  .row:first-child {
+  .selected-work .row:first-child {
     border-top: 0;
   }
-  .row:last-child {
+  .selected-work .row:last-child {
     border-bottom: 1px solid var(--border);
   }
 
-  .row-trigger {
+  .selected-work .row-trigger {
     width: 100%;
     background: none;
     border: 0;
@@ -211,20 +116,20 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     gap: 24px;
     font-family: inherit;
   }
-  .row-trigger:focus-visible {
+  .selected-work .row-trigger:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: 8px;
     border-radius: 2px;
   }
 
-  .row-main {
+  .selected-work .row-main {
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-width: 0;
   }
 
-  .row-title {
+  .selected-work .row-title {
     font-family: "Playfair Display", Georgia, serif;
     font-size: 32px;
     font-weight: 400;
@@ -234,19 +139,19 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     opacity: 0.82;
     transition: opacity 0.25s ease;
   }
-  .row:hover .row-title,
-  .row-trigger:focus-visible .row-title,
-  .row.is-open .row-title {
+  .selected-work .row:hover .row-title,
+  .selected-work .row-trigger:focus-visible .row-title,
+  .selected-work .row.is-open .row-title {
     opacity: 1;
   }
 
-  .row-summary {
+  .selected-work .row-summary {
     font-size: 14px;
     color: var(--text-muted);
     line-height: 1.6;
   }
 
-  .row-meta {
+  .selected-work .row-meta {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -254,14 +159,14 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     white-space: nowrap;
   }
 
-  .meta-text {
+  .selected-work .meta-text {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.04em;
   }
 
-  .toggle {
+  .selected-work .toggle {
     font-family: "JetBrains Mono", monospace;
     font-size: 18px;
     color: var(--text-muted);
@@ -271,40 +176,39 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     user-select: none;
     transition: color 0.25s ease;
   }
-  .row:hover .toggle,
-  .row.is-open .toggle {
+  .selected-work .row:hover .toggle,
+  .selected-work .row.is-open .toggle {
     color: var(--accent);
   }
 
-  /* Accordion panel via grid-template-rows trick */
-  .panel {
+  .selected-work .panel {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
-  .row.is-open .panel {
+  .selected-work .row.is-open .panel {
     grid-template-rows: 1fr;
   }
-  .panel-inner {
+  .selected-work .panel-inner {
     overflow: hidden;
     min-height: 0;
   }
 
-  .panel-content {
+  .selected-work .panel-content {
     padding: 12px 0 36px;
     display: flex;
     flex-direction: column;
     gap: 22px;
   }
 
-  .narrative {
+  .selected-work .narrative {
     font-size: 16px;
     color: var(--text);
     line-height: 1.7;
     max-width: 560px;
   }
 
-  .trail {
+  .selected-work .trail {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     color: var(--text-muted);
@@ -313,23 +217,23 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     word-spacing: 2px;
   }
 
-  .shots {
+  .selected-work .shots {
     display: grid;
     gap: 18px;
     grid-template-columns: 1fr;
     margin-top: 4px;
   }
-  .shots[data-count="2"] {
+  .selected-work .shots[data-count="2"] {
     grid-template-columns: 1fr 1fr;
   }
 
-  .shot {
+  .selected-work .shot {
     margin: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  .shot img {
+  .selected-work .shot img {
     display: block;
     width: 100%;
     aspect-ratio: 16 / 10;
@@ -338,17 +242,17 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     border: 1px solid var(--border);
     border-radius: 4px;
   }
-  .shot figcaption {
+  .selected-work .shot figcaption {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.04em;
   }
 
-  .link {
+  .selected-work .link {
     margin-top: 2px;
   }
-  .link a {
+  .selected-work .link a {
     font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     color: var(--accent);
@@ -358,38 +262,20 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     padding-bottom: 1px;
     transition: border-color 0.2s ease;
   }
-  .link a:hover {
+  .selected-work .link a:hover {
     border-bottom-color: var(--accent);
   }
-  .link .arrow {
+  .selected-work .link .arrow {
     display: inline-block;
     margin-left: 4px;
     transform: translateY(-1px);
   }
 
-  .also {
-    margin-top: 56px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-    line-height: 1.8;
-    opacity: 0.7;
-  }
-  .also-label {
-    margin-right: 14px;
-    opacity: 0.7;
-  }
-  .also .dot {
-    opacity: 0.5;
-  }
-
-  /* See more — mobile only */
-  .row-more {
+  .selected-work .row-more {
     display: none;
     border-top: 1px solid var(--border);
   }
-  .row-more__btn {
+  .selected-work .row-more__btn {
     width: 100%;
     background: none;
     border: 0;
@@ -402,102 +288,347 @@ const SHOW_HOLDING = false; // Clean hook — flip on when copy is ready.
     cursor: pointer;
     transition: color 0.2s ease;
   }
-  .row-more__btn:hover,
-  .row-more__btn:focus-visible {
+  .selected-work .row-more__btn:hover,
+  .selected-work .row-more__btn:focus-visible {
     color: var(--accent);
   }
-  .row-more__btn span {
+  .selected-work .row-more__btn span {
     display: inline-block;
     margin-left: 8px;
   }
 
   @media (max-width: 640px) {
-    .work-index:not(.is-expanded) .row--extra {
+    .selected-work .work-index:not(.is-expanded) .row--extra {
       display: none;
     }
-    .work-index:not(.is-expanded) .row-more {
+    .selected-work .work-index:not(.is-expanded) .row-more {
       display: list-item;
     }
-  }
-
-  @media (max-width: 640px) {
     .selected-work {
       padding: 16px 24px 100px;
     }
-    .row-trigger {
+    .selected-work .row-trigger {
       grid-template-columns: 1fr;
       gap: 10px;
       padding: 22px 0;
     }
-    .row-title {
+    .selected-work .row-title {
       font-size: 26px;
     }
-    .row-meta {
+    .selected-work .row-meta {
       padding-top: 2px;
       justify-content: space-between;
     }
-    .shots[data-count="2"] {
+    .selected-work .shots[data-count="2"] {
       grid-template-columns: 1fr;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .panel,
-    .row-title,
-    .toggle,
-    .link a {
+    .selected-work .panel,
+    .selected-work .row-title,
+    .selected-work .toggle,
+    .selected-work .link a {
       transition: none;
+    }
+  }
+
+  /* Skeleton — placeholder rows shown until lazy fetch resolves.
+     Matches the real row's grid + padding so swap-in is shift-free. */
+  .selected-work .row--skeleton {
+    padding: 28px 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 24px;
+  }
+  .selected-work .row--skeleton .skeleton-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+  .selected-work .skeleton-bar {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: rgba(122, 173, 255, 0.05);
+    border-radius: 2px;
+  }
+  .selected-work .skeleton-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(122, 173, 255, 0.1) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.8s linear infinite;
+  }
+  .selected-work .row--skeleton:nth-child(2) .skeleton-bar::after {
+    animation-delay: 0.15s;
+  }
+  .selected-work .row--skeleton:nth-child(3) .skeleton-bar::after {
+    animation-delay: 0.3s;
+  }
+  .selected-work .row--skeleton:nth-child(4) .skeleton-bar::after {
+    animation-delay: 0.45s;
+  }
+  .selected-work .skeleton-bar--title {
+    height: 32px;
+    width: 58%;
+    max-width: 380px;
+  }
+  .selected-work .skeleton-bar--summary {
+    height: 14px;
+    width: 75%;
+    max-width: 440px;
+  }
+  .selected-work .skeleton-bar--meta {
+    height: 11px;
+    width: 168px;
+    margin-top: 12px;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+
+  @media (max-width: 640px) {
+    .selected-work .row--skeleton {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 22px 0;
+    }
+    .selected-work .skeleton-bar--title {
+      height: 26px;
+      width: 72%;
+    }
+    .selected-work .skeleton-bar--summary {
+      height: 14px;
+      width: 90%;
+    }
+    .selected-work .skeleton-bar--meta {
+      height: 11px;
+      width: 140px;
+      margin-top: 4px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .selected-work .skeleton-bar::after {
+      animation: none;
+      opacity: 0.4;
+      transform: none;
     }
   }
 </style>
 
 <script>
-  type Row = {
-    el: HTMLElement;
-    btn: HTMLButtonElement;
-    panel: HTMLElement;
-    toggle: HTMLElement | null;
+  type ProjectLink = { label: string; url: string };
+  type ProjectImage = { src: string; alt: string; caption?: string };
+  type Project = {
+    id: string;
+    title: string;
+    client: string;
+    role: string;
+    year: string;
+    yearStart: number;
+    yearEnd: number | null;
+    stack: string[];
+    status: "live" | "archived" | "shelved";
+    featured: boolean;
+    summary: string;
+    narrative: string[];
+    award?: string;
+    link?: ProjectLink;
+    images: ProjectImage[];
+    note?: string;
   };
 
-  const rows: Row[] = Array.from(
-    document.querySelectorAll<HTMLElement>(".selected-work .row:not(.row-more)")
-  ).map((el) => ({
-    el,
-    btn: el.querySelector<HTMLButtonElement>(".row-trigger")!,
-    panel: el.querySelector<HTMLElement>(".panel")!,
-    toggle: el.querySelector<HTMLElement>(".toggle"),
-  }));
+  const section = document.querySelector<HTMLElement>(".selected-work");
+  if (section) {
+    const rowTpl = document.getElementById("work-row-template") as HTMLTemplateElement | null;
+    const moreTpl = document.getElementById("work-more-template") as HTMLTemplateElement | null;
+    const index = section.querySelector<HTMLOListElement>(".work-index");
+    const projectsUrl = section.dataset.projectsUrl || "/projects.json";
 
-  const setOpen = (r: Row, open: boolean): void => {
-    r.el.classList.toggle("is-open", open);
-    r.btn.setAttribute("aria-expanded", String(open));
-    if (open) {
-      r.panel.removeAttribute("inert");
-    } else {
-      r.panel.setAttribute("inert", "");
+    if (rowTpl && moreTpl && index) {
+      let loaded = false;
+      let loading: Promise<void> | null = null;
+
+      const sortKey = (p: Project): number =>
+        p.yearEnd === null ? Number.MAX_SAFE_INTEGER : p.yearStart;
+
+      const esc = (s: string): string =>
+        s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+
+      const buildRow = (p: Project, isExtra: boolean): HTMLLIElement => {
+        const fragment = rowTpl.content.cloneNode(true) as DocumentFragment;
+        const li = fragment.querySelector(".row") as HTMLLIElement;
+        if (isExtra) li.classList.add("row--extra");
+
+        const trigger = li.querySelector<HTMLButtonElement>(".row-trigger")!;
+        trigger.id = `row-${p.id}`;
+        trigger.setAttribute("aria-controls", `panel-${p.id}`);
+
+        (li.querySelector(".row-title") as HTMLElement).textContent = p.title;
+        (li.querySelector(".row-summary") as HTMLElement).textContent = p.summary;
+        (li.querySelector(".meta-text") as HTMLElement).textContent =
+          `${p.client.toLowerCase()} · ${p.year}`;
+
+        const panel = li.querySelector<HTMLElement>(".panel")!;
+        panel.id = `panel-${p.id}`;
+        panel.setAttribute("aria-labelledby", `row-${p.id}`);
+
+        const panelContent = li.querySelector<HTMLElement>(".panel-content")!;
+        const parts: string[] = [];
+
+        for (const para of p.narrative) {
+          parts.push(`<p class="narrative">${esc(para)}</p>`);
+        }
+
+        const trailText = [p.role, p.year, ...p.stack].join(" · ").toLowerCase();
+        parts.push(`<p class="trail">${esc(trailText)}</p>`);
+
+        if (p.images.length > 0) {
+          parts.push(`<div class="shots" data-count="${p.images.length}">`);
+          for (const img of p.images) {
+            parts.push(
+              `<figure class="shot"><img src="${esc(img.src)}" alt="${esc(img.alt)}" loading="lazy" decoding="async" />` +
+                (img.caption ? `<figcaption>${esc(img.caption)}</figcaption>` : "") +
+                `</figure>`
+            );
+          }
+          parts.push(`</div>`);
+        }
+
+        if (p.link?.url) {
+          parts.push(
+            `<p class="link"><a href="${esc(p.link.url)}" target="_blank" rel="noopener noreferrer">${esc(p.link.label)}<span class="arrow" aria-hidden="true">↗</span></a></p>`
+          );
+        }
+
+        panelContent.innerHTML = parts.join("");
+        return li;
+      };
+
+      type RowApi = {
+        el: HTMLElement;
+        btn: HTMLButtonElement;
+        panel: HTMLElement;
+        toggle: HTMLElement | null;
+      };
+
+      const wireAccordion = (rows: RowApi[]): void => {
+        const setOpen = (r: RowApi, open: boolean): void => {
+          r.el.classList.toggle("is-open", open);
+          r.btn.setAttribute("aria-expanded", String(open));
+          if (open) r.panel.removeAttribute("inert");
+          else r.panel.setAttribute("inert", "");
+          if (r.toggle) r.toggle.textContent = open ? "−" : "+";
+        };
+        rows.forEach((r) => setOpen(r, false));
+        rows.forEach((r) => {
+          r.btn.addEventListener("click", () => {
+            const wasOpen = r.el.classList.contains("is-open");
+            rows.forEach((other) => {
+              if (other !== r) setOpen(other, false);
+            });
+            setOpen(r, !wasOpen);
+          });
+        });
+      };
+
+      const render = (projects: Project[]): void => {
+        const featured = projects
+          .filter((p) => p.featured)
+          .sort((a, b) => sortKey(b) - sortKey(a));
+
+        index.innerHTML = "";
+        const rowEls: HTMLLIElement[] = featured.map((p, i) =>
+          buildRow(p, i >= 3)
+        );
+        rowEls.forEach((el) => index.appendChild(el));
+
+        if (featured.length > 3) {
+          const moreFrag = moreTpl.content.cloneNode(true) as DocumentFragment;
+          index.appendChild(moreFrag);
+          const moreBtn = index.querySelector<HTMLButtonElement>(".row-more__btn");
+          moreBtn?.addEventListener("click", () => {
+            index.classList.add("is-expanded");
+            moreBtn.setAttribute("aria-expanded", "true");
+          });
+        }
+
+        const rows: RowApi[] = rowEls.map((el) => ({
+          el,
+          btn: el.querySelector<HTMLButtonElement>(".row-trigger")!,
+          panel: el.querySelector<HTMLElement>(".panel")!,
+          toggle: el.querySelector<HTMLElement>(".toggle"),
+        }));
+        wireAccordion(rows);
+
+        index.dataset.state = "loaded";
+        document.dispatchEvent(new CustomEvent("work:loaded"));
+      };
+
+      const load = (): Promise<void> => {
+        if (loaded) return Promise.resolve();
+        if (loading) return loading;
+        index.dataset.state = "loading";
+        loading = fetch(projectsUrl)
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          })
+          .then((data: { projects: Project[] }) => {
+            render(data.projects);
+            loaded = true;
+          })
+          .catch((err) => {
+            console.error("[selected-works] failed to load", err);
+            index.dataset.state = "error";
+            loading = null;
+          });
+        return loading;
+      };
+
+      // Trigger fetch only when the section actually enters the viewport.
+      // Shrink the root by 1px on the bottom so an at-edge target (top
+      // touching viewport.bottom) is unambiguously NOT intersecting until
+      // the user actually scrolls into it.
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                load();
+                io.disconnect();
+                break;
+              }
+            }
+          },
+          { rootMargin: "0px 0px -1px 0px", threshold: 0 }
+        );
+        io.observe(section);
+      } else {
+        load();
+      }
+
+      // If the URL is /work on initial load, fetch immediately so the
+      // auto-scroll script in Site.astro can land on rendered content.
+      if (location.pathname === "/work") {
+        load();
+      }
     }
-    if (r.toggle) r.toggle.textContent = open ? "−" : "+";
-  };
-
-  rows.forEach((r) => setOpen(r, false));
-
-  rows.forEach((r) => {
-    r.btn.addEventListener("click", () => {
-      const wasOpen = r.el.classList.contains("is-open");
-      rows.forEach((other) => {
-        if (other !== r) setOpen(other, false);
-      });
-      setOpen(r, !wasOpen);
-    });
-  });
-
-  // "see more" — reveal hidden rows on mobile
-  const moreBtn = document.querySelector<HTMLButtonElement>(".row-more__btn");
-  const workIndex = document.querySelector<HTMLElement>(".work-index");
-  if (moreBtn && workIndex) {
-    moreBtn.addEventListener("click", () => {
-      workIndex.classList.add("is-expanded");
-      moreBtn.setAttribute("aria-expanded", "true");
-    });
   }
 </script>

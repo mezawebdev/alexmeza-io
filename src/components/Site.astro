@@ -234,11 +234,20 @@ import SelectedWork from "./SelectedWork.astro";
     document.querySelectorAll<HTMLElement>("[data-section-path]")
   ).map((el) => ({ el, path: el.dataset.sectionPath! }));
 
-  // On initial load: if the URL is /work, jump straight there before first paint
+  // On initial load: if the URL is /work, jump straight there.
+  // Snap immediately for the empty shell, then re-snap once the lazy-loaded
+  // rows render so the user lands on real content (not a layout shift).
   if (sections.length > 1) {
     const target = sections.find((s) => s.path === location.pathname);
     if (target && target.path !== "/") {
-      target.el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
+      const snap = (): void =>
+        target.el.scrollIntoView({ behavior: "instant" as ScrollBehavior, block: "start" });
+      snap();
+      const workIndex = document.querySelector<HTMLElement>(".work-index");
+      const alreadyLoaded = workIndex?.dataset.state === "loaded";
+      if (!alreadyLoaded) {
+        document.addEventListener("work:loaded", snap, { once: true });
+      }
     }
   }
 
